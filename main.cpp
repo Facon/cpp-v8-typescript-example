@@ -60,8 +60,7 @@ int main(int /*argc*/, char* argv[]) {
 	
 	std::string fileData((std::istreambuf_iterator<char>(jsFile)), std::istreambuf_iterator<char>());
 	
-    v8::Local<v8::String> source =
-        v8::String::NewFromUtf8(isolate, fileData.data()/*, v8::NewStringType::kNormal, static_cast<int>(size)*/).ToLocalChecked();
+    v8::Local<v8::String> source = v8::String::NewFromUtf8(isolate, fileData.data());
     // Compile the source code.
     v8::Local<v8::Script> script =
         v8::Script::Compile(context, source).ToLocalChecked();

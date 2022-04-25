@@ -2,16 +2,19 @@ cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED YES)
 
 SET(PROJECT_NAME cpp-v8-typescript-example)
 project(${PROJECT_NAME})
 
 if(MSVC)
-  add_compile_options(/W4 /WX)
+	add_compile_options(/W4 /WX)
 else()
-  add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+	# This if should be remove when v8 is properly detected in UNIX!
+	if (NOT UNIX)
+		add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+	endif()
 endif()
 
 message(STATUS "Is MSVC: " ${MSVC})
@@ -27,6 +30,13 @@ PRIVATE
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE V8_COMPRESS_POINTERS)
+
+message(STATUS "Is UNIX: "${UNIX})
+
+# This if should be remove when v8 is properly detected in UNIX!
+if (UNIX)
+	target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/v8)
+endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE v8 v8_libbase v8_libplatform)
 
